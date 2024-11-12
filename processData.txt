@@ -1,0 +1,48 @@
+数据重命名 实现了将A目录下所有视频重命名到B目录下 并在 A目录下生成重命名前的文件名与重命名后的name_map.txt文件
+
+python clips_rename.py A B 0
+
+根据视频转场切分文件  A是视频目录，B是生成视频的目录，为根据A中视频的名称，在B中创建子目录（目录名称为视频名称），
+子目录下存储切分的视频，用_切分前面是视频名称后面是起始帧号
+例如 000001_000050.mp4  表示 原视频的名字是000001.mp4 该段视频是 原视频第50开始的一段视频
+说明： /mnt/marathon/pingpangclips/西瓜视频/video_rename_no_scene_change 目录下生成的视频下划线后面的不是起始帧（生成前没有考虑）
+
+python scene_change.py A B
+
+提取单个目标物体放到原视频位置 其他地方用黑色填充。而且后面也是活加上_和起始帧号
+视频都是放在二级目录下 detect 是原视频目录，test是生成视频目录，目前没有考虑周围有很多人的情况。
+├── detect
+│       ├── object_tracking
+│       ├── object_tracking2
+│       │       ├── 1.mp4
+│       │       └── 2.mp4
+│       ├── object_tracking3
+│       │       ├── 1.mp4
+│       │       ├── 2.mp4
+│       │       ├── 3.mp4
+│       │       ├── 5.mp4
+│       │       └── 8.mp4
+│       ├── object_tracking4
+│       │       ├── 1.mp4
+│       │       ├── 2.mp4
+│       │       └── 3.mp4
+│       └── object_tracking5
+│           ├── 1.mp4
+│           ├── 2.mp4
+│           └── 3.mp4
+└── test
+    ├── object_tracking2
+    │       └── 2_000016.mp4
+    ├── object_tracking3
+    │       └── 2_000009.mp4
+    ├── object_tracking4
+    │       ├── 1_000000_000002.mp4
+    │       ├── 2_000000_000002.mp4
+    │       └── 3_000000_000002.mp4
+    └── object_tracking5
+        ├── 1_000000_000002.mp4
+        ├── 2_000000_000002.mp4
+        └── 3_000000_000002.mp4
+
+
+python data_process.py --source_dir "../runs/detect" --save_dir "../runs/test" --classes 0 --view-img
